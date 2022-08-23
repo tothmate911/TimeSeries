@@ -1,8 +1,19 @@
 import React from 'react'
+import { TimeSeries } from './PowerStationDateData'
 
-const TimeSeriesColumn = () => {
+interface Props {
+  timeSeries: TimeSeries;
+}
+
+const TimeSeriesColumn: React.FC<Props> = ({timeSeries}) => {
   return (
-    <div>TimeSeriesColumn</div>
+    <div className="column">
+      <div className="cell">ver{timeSeries.version}</div>
+      <div className="cell">{timeSeries.timestamp}</div>
+      {timeSeries.series.map((data, index) => (
+        <div key={index} className="cell">{data}</div>
+      ))}
+    </div>
   )
 }
 

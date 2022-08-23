@@ -7,12 +7,6 @@ export const App: React.FC = () => {
     <div>
       <Upload />
       <Show />
-      {/* <hr/>
-      <GreetingView />
-      <hr/>
-      <AddGreeting />
-      <hr/>
-      <DeleteGreeting /> */}
     </div>
   );
 };

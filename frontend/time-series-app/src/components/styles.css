@@ -1,0 +1,11 @@
+.column {
+    float: left;
+    border: 1px;
+    border-style: solid;
+}
+
+.cell {
+    border-top: 1px;
+    border-top-style: solid;
+    padding: 2px;
+}

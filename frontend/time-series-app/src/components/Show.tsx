@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import DateSelector from './DateSelector';
 import PowerStationSelector from './PowerStationSelector'
 import Table from './Table';
+import './styles.css'
 
 const Show: React.FC = () => {
 

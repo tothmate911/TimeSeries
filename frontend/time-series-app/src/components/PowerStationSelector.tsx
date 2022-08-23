@@ -8,31 +8,31 @@ interface Props {
   setSelectedPowerStation: React.Dispatch<React.SetStateAction<string>>
 }
 
-const PowerStationSelector: React.FC<Props> = ({setSelectedPowerStation}) => {
+const PowerStationSelector: React.FC<Props> = ({ setSelectedPowerStation }) => {
 
-  const [availablePowerStations, setAvailablePowerStations] = useState([]);  
-    
+  const [availablePowerStations, setAvailablePowerStations] = useState([]);
+
   useEffect(() => {
-      axios.get("/power-stations")
+    axios.get("/power-stations")
       .then((response) => {
-          setAvailablePowerStations(response.data);
+        setAvailablePowerStations(response.data);
       })
       .catch((error) => {
-          console.log(error);
+        console.log(error);
       });
   }, []);
-    
+
   return (
-      <select 
-        name="PowerStations" id="PowerStations"
-        onChange={e => setSelectedPowerStation(e.target.value)}
-      >
-        {availablePowerStations.map(powerStation => (
-          <option key={powerStation} value={powerStation}>
-            {powerStation}
-          </option>
-        ))}
-      </select>
+    <select
+      name="PowerStations" id="PowerStations"
+      onChange={e => setSelectedPowerStation(e.target.value)}
+    >
+      {availablePowerStations.map(powerStation => (
+        <option key={powerStation} value={powerStation}>
+          {powerStation}
+        </option>
+      ))}
+    </select>
   )
 }
 

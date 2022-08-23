@@ -35,7 +35,7 @@ public class TimeSeriesController {
         return timeSeriesService.getAvailableDates(powerStation);
     }
 
-    @GetMapping("/power-station-day-data")
+    @GetMapping("/power-station-date-data")
     public PowerStationDateData getPowerStationDayData(@RequestParam("power-station") String powerStation,
                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         return timeSeriesService.getPowerStationDateData(powerStation, date);
