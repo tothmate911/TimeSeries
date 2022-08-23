@@ -1,6 +1,5 @@
 package com.reg.time_series.service;
 
-import com.reg.time_series.entity.PowerStation;
 import com.reg.time_series.entity.PowerStationDateData;
 import com.reg.time_series.repository.PowerStationDayDataRepository;
 import com.reg.time_series.entity.TimeSeriesEntity;
@@ -35,7 +34,7 @@ class TimeSeriesServiceImplTest {
 
     @Test
     public void processTimeSeries_newTimeSeries() {
-        when(mockPowerStationDayDataRepository.findByPowerStationNameAndDate(anyString(), any())).thenReturn(null);
+        when(mockPowerStationDayDataRepository.findByPowerStationAndDate(anyString(), any())).thenReturn(null);
         timeSeriesService.processTimeSeries(getTimeSeriesInputModel_ps_83_20210628_032953());
 
         verify(mockPowerStationDayDataRepository).save(powerStationDayDataArgumentCaptor.capture());
@@ -50,7 +49,7 @@ class TimeSeriesServiceImplTest {
     @Test
     public void processTimeSeries_mergeTimeSeries() {
         PowerStationDateData powerStationDateData = getPowerStationDayData();
-        when(mockPowerStationDayDataRepository.findByPowerStationNameAndDate("Naper\\u0151m\\u0171 2021 Kft. Iborfia",
+        when(mockPowerStationDayDataRepository.findByPowerStationAndDate("Naper\\u0151m\\u0171 2021 Kft. Iborfia",
                 LocalDate.of(2021, 6, 28))).thenReturn(powerStationDateData);
         timeSeriesService.processTimeSeries(getTimeSeriesInputModel_ps_83_20210628_115951());
 
@@ -66,7 +65,7 @@ class TimeSeriesServiceImplTest {
     @Test
     public void processTimeSeries_mergeTimeSeries_noUpdateBecauseTooLate() {
         PowerStationDateData powerStationDateData = getPowerStationDayData();
-        when(mockPowerStationDayDataRepository.findByPowerStationNameAndDate("Naper\\u0151m\\u0171 2021 Kft. Iborfia",
+        when(mockPowerStationDayDataRepository.findByPowerStationAndDate("Naper\\u0151m\\u0171 2021 Kft. Iborfia",
                 LocalDate.of(2021, 6, 28))).thenReturn(powerStationDateData);
         TimeSeriesInputModel timeSeriesInputModel = getTimeSeriesInputModel_ps_83_20210628_115951();
         timeSeriesInputModel.setTimestamp(LocalDateTime.of(2021, 6, 28, 22, 35, 53));
@@ -80,7 +79,7 @@ class TimeSeriesServiceImplTest {
     @Test
     public void processTimeSeries_mergeTimeSeries_differentSizeOfSeries() {
         PowerStationDateData powerStationDateData = getPowerStationDayData();
-        when(mockPowerStationDayDataRepository.findByPowerStationNameAndDate("Naper\\u0151m\\u0171 2021 Kft. Iborfia",
+        when(mockPowerStationDayDataRepository.findByPowerStationAndDate("Naper\\u0151m\\u0171 2021 Kft. Iborfia",
                 LocalDate.of(2021, 6, 28))).thenReturn(powerStationDateData);
         TimeSeriesInputModel timeSeriesInputModel = getTimeSeriesInputModel_ps_83_20210628_115951();
         timeSeriesInputModel.setSeries(getShorterSeries());
@@ -96,7 +95,7 @@ class TimeSeriesServiceImplTest {
                 .build();
 
         return PowerStationDateData.builder()
-                .powerStation(new PowerStation("Naper\\u0151m\\u0171 2021 Kft. Iborfia"))
+                .powerStation("Naper\\u0151m\\u0171 2021 Kft. Iborfia")
                 .date(LocalDate.of(2021, 6, 28))
                 .zone(TimeZone.getTimeZone("Europe/Budapest"))
                 .latestTimeSeries(timeSeriesEntity)

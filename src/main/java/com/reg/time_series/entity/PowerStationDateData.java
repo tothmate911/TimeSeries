@@ -16,7 +16,7 @@ import java.util.TimeZone;
 @Builder
 @Entity
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"power_station_id", "date"})
+        @UniqueConstraint(columnNames = {"powerStation", "date"})
 })
 public class PowerStationDateData {
 
@@ -24,9 +24,7 @@ public class PowerStationDateData {
     @GeneratedValue
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "power_station_id")
-    private PowerStation powerStation;
+    private String powerStation;
     private LocalDate date;
 
     private TimeZone zone;

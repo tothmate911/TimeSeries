@@ -12,11 +12,11 @@ import java.util.List;
 @Repository
 public interface PowerStationDayDataRepository extends JpaRepository<PowerStationDateData, Long> {
 
-    @Query("SELECT p FROM PowerStationDateData p WHERE p.powerStation.name = :powerStationName AND date = :date")
-    PowerStationDateData findByPowerStationNameAndDate(@Param("powerStationName") String powerStationName,
-                                                       @Param("date") LocalDate date);
+    PowerStationDateData findByPowerStationAndDate(String powerStationName, LocalDate date);
 
-    @Query("SELECT p.date FROM PowerStationDateData p WHERE p.powerStation.name = :powerStationName")
-    List<LocalDate> findAvailableDatesByPowerStationName(@Param("powerStationName") String powerStationName);
+    @Query("SELECT p.date FROM PowerStationDateData p WHERE p.powerStation = :powerStation")
+    List<LocalDate> findAvailableDatesByPowerStation(@Param("powerStation") String powerStation);
 
+    @Query("SELECT DISTINCT p.powerStation FROM PowerStationDateData p")
+    List<String> findAllPowerStations();
 }

@@ -1,11 +1,9 @@
 package com.reg.time_series.service;
 
-import com.reg.time_series.entity.PowerStation;
 import com.reg.time_series.entity.PowerStationDateData;
 import com.reg.time_series.repository.PowerStationDayDataRepository;
 import com.reg.time_series.entity.TimeSeriesEntity;
 import com.reg.time_series.model.TimeSeriesInputModel;
-import com.reg.time_series.repository.PowerStationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,12 +21,9 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
     @Autowired
     private PowerStationDayDataRepository powerStationDateDataRepository;
 
-    @Autowired
-    private PowerStationRepository powerStationRepository;
-
     @Override
     public PowerStationDateData processTimeSeries(TimeSeriesInputModel timeSeriesInputModel) {
-        PowerStationDateData powerStationDateData = powerStationDateDataRepository.findByPowerStationNameAndDate(
+        PowerStationDateData powerStationDateData = powerStationDateDataRepository.findByPowerStationAndDate(
                 timeSeriesInputModel.getPowerStation(), timeSeriesInputModel.getDate());
 
         TimeSeriesEntity newTimeSeries = TimeSeriesEntity.builder()
@@ -51,7 +46,7 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
         // The version of the time series is 1 because it is the first time series
         newTimeSeries.setVersion(1);
         return PowerStationDateData.builder()
-                .powerStation(new PowerStation(timeSeriesInputModel.getPowerStation()))
+                .powerStation(timeSeriesInputModel.getPowerStation())
                 .date(timeSeriesInputModel.getDate())
                 .zone(timeSeriesInputModel.getZone())
                 .latestTimeSeries(newTimeSeries)
@@ -109,18 +104,18 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
 
     @Override
     public List<String> getAllPowerStationNames() {
-        return powerStationRepository.findAllPowerStationNames();
+        return powerStationDateDataRepository.findAllPowerStations();
     }
 
     @Override
     public List<String> getAvailableDates(String powerStationName) {
-        return powerStationDateDataRepository.findAvailableDatesByPowerStationName(powerStationName).stream()
+        return powerStationDateDataRepository.findAvailableDatesByPowerStation(powerStationName).stream()
                 .map(LocalDate::toString).toList();
     }
 
     @Override
     public PowerStationDateData getPowerStationDateData(String powerStation, LocalDate date) {
-        return powerStationDateDataRepository.findByPowerStationNameAndDate(powerStation, date);
+        return powerStationDateDataRepository.findByPowerStationAndDate(powerStation, date);
     }
 
 }
