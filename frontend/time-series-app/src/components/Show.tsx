@@ -1,19 +1,41 @@
 import React, { useState } from 'react'
-import DateSelector from './DateSelector';
-import PowerStationSelector from './PowerStationSelector'
-import Table from './Table';
+import DateSelector from './selectorComponents/DateSelector';
+import PowerStationSelector from './selectorComponents/PowerStationSelector'
+import Table from './tableComponents/Table';
 import './styles.css'
 
-const Show: React.FC = () => {
+interface Props {
+  availablePowerStations: string[];
+  setAvailablePowerStations: React.Dispatch<React.SetStateAction<string[]>>
+}
 
-    const [selectedPowerStation, setSelectedPowerStation] = useState("");
-    const [selectedDate, setSelectedDate] = useState("");
+const Show: React.FC<Props> = ({ availablePowerStations, setAvailablePowerStations }) => {
+
+  const [selectedPowerStation, setSelectedPowerStation] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [readyToFetchTimeSeries, setReadyToFetchTimeSeries] = useState(false);
 
   return (
     <div>
-        <PowerStationSelector setSelectedPowerStation={setSelectedPowerStation}/>
-        <DateSelector selectedPowerStation={selectedPowerStation} setSelectedDate={setSelectedDate}/>
-        <Table selectedPowerStation={selectedPowerStation} selectedDate={selectedDate} />
+      <PowerStationSelector
+        selectedPowerStation={selectedPowerStation}
+        setSelectedPowerStation={setSelectedPowerStation}
+        availablePowerStations={availablePowerStations}
+        setAvailablePowerStations={setAvailablePowerStations}
+      />
+      <DateSelector
+        selectedPowerStation={selectedPowerStation}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        setReadyToFetchTimeSeries={setReadyToFetchTimeSeries}
+      />
+      <Table
+        selectedPowerStation={selectedPowerStation}
+        selectedDate={selectedDate}
+        readyToFetchTimeSeries={readyToFetchTimeSeries}
+        setReadyToFetchTimeSeries={setReadyToFetchTimeSeries}
+      />
+
     </div>
   )
 }

@@ -9,3 +9,19 @@
     border-top-style: solid;
     padding: 2px;
 }
+
+input[type="file"] {
+    display: none;
+}
+
+label {
+    color: white;
+    height: 80px;
+    width: 250px;
+    background-color: #ff0000;
+
+    margin: auto;
+    padding: 15px;
+    border-radius: 10px;
+    
+}
