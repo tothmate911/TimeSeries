@@ -26,5 +26,8 @@ input[type="file"] {
     border-radius: 10px;
 
     cursor: pointer;
+}
 
+.noChange {
+    background-color: rgb(236, 192, 158);
 }

@@ -1,3 +1,5 @@
+import internal from "stream";
+
 export interface PowerStationDateData {
     latestTimeSeries: TimeSeries;
     previousTimeSeriesList: TimeSeries[];
@@ -9,4 +11,5 @@ export interface TimeSeries {
     timestamp: string;
     version: number;
     period: string;
+    noChangeIndexLimit: number;
 }
