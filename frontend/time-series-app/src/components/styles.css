@@ -8,13 +8,14 @@
     border-top: 1px;
     border-top-style: solid;
     padding: 2px;
+    height: 18px;
 }
 
 input[type="file"] {
     display: none;
 }
 
-label {
+.upload-label {
     color: white;
     height: 80px;
     width: 250px;
@@ -23,5 +24,7 @@ label {
     margin: auto;
     padding: 15px;
     border-radius: 10px;
-    
+
+    cursor: pointer;
+
 }

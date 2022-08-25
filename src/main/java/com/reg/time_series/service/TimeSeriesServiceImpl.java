@@ -8,8 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -31,6 +30,8 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
                 .period(timeSeriesInputModel.getPeriod())
                 .series(timeSeriesInputModel.getSeries())
                 .build();
+        newTimeSeries.calculateNoChangeIndexLimit(
+                timeSeriesInputModel.getZone(), timeSeriesInputModel.getDate(), SAFETY_WINDOW_MINUTES);
 
         if (powerStationDateData == null) {
             powerStationDateData = buildNewPowerStationDayData(timeSeriesInputModel, newTimeSeries);
@@ -54,52 +55,45 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
     }
 
     private void updatePowerStationDayData(PowerStationDateData powerStationDateData, TimeSeriesEntity newTimeSeriesEntity) {
-        TimeSeriesEntity actualTimeSeriesEntity = powerStationDateData.getLatestTimeSeries();
-
-        mergeSeries(actualTimeSeriesEntity, newTimeSeriesEntity);
-
-        newTimeSeriesEntity.setVersion(actualTimeSeriesEntity.getVersion() + 1);
-        powerStationDateData.getPreviousTimeSeriesList().add(actualTimeSeriesEntity);
+        TimeSeriesEntity latestSavedTimeSeriesEntity = powerStationDateData.getLatestTimeSeries();
+        // Check if latest saved and new series size are equal
+        checkSeriesSize(newTimeSeriesEntity, latestSavedTimeSeriesEntity);
+        // Merge the latest saved and the new series
+        newTimeSeriesEntity.setSeries(
+                mergeSeries(latestSavedTimeSeriesEntity.getSeries(),
+                        newTimeSeriesEntity.getSeries(), newTimeSeriesEntity.getNoChangeIndexLimit())
+        );
+        // Add the new TimeSeries as the latest saved TimeSeries
+        newTimeSeriesEntity.setVersion(latestSavedTimeSeriesEntity.getVersion() + 1);
         powerStationDateData.setLatestTimeSeries(newTimeSeriesEntity);
+        powerStationDateData.getPreviousTimeSeriesList().add(latestSavedTimeSeriesEntity);
     }
 
-    private void mergeSeries(TimeSeriesEntity actualTimeSeriesEntity, TimeSeriesEntity newTimeSeriesEntity) {
-        List<Integer> newSeries = newTimeSeriesEntity.getSeries();
-        List<Integer> actualSeries = actualTimeSeriesEntity.getSeries();
-        if (newSeries.size() != actualSeries.size()) {
+    private void checkSeriesSize(TimeSeriesEntity newTimeSeriesEntity, TimeSeriesEntity latestSavedTimeSeriesEntity) {
+        if (newTimeSeriesEntity.getSeries().size() != latestSavedTimeSeriesEntity.getSeries().size()) {
             throw new IllegalArgumentException(
                     "The sizes of the series in the new and the actual time series are different!\n" +
-                            "actualTimeSeriesEntity: " + actualTimeSeriesEntity + "\n" +
+                            "actualTimeSeriesEntity: " + latestSavedTimeSeriesEntity + "\n" +
                             "newTimeSeriesEntity: " + newTimeSeriesEntity);
         }
+    }
 
-        // TODO check whether date and timestamp are on the same day
-        int noChangeIndexLimit = calculateNoChangeIndexLimit(newTimeSeriesEntity);
-        if (noChangeIndexLimit < newSeries.size()) {
-            List<Integer> currentSeriesUntilNoChangeLimit = actualSeries
-                    .subList(0, noChangeIndexLimit);
-            List<Integer> newSeriesFromNoChangeLimit = newSeries.subList(noChangeIndexLimit, newSeries.size());
-            newTimeSeriesEntity.setSeries(Stream.concat(
-                    currentSeriesUntilNoChangeLimit.stream(),
-                    newSeriesFromNoChangeLimit.stream()
-            ).toList());
-        } else {
-            newTimeSeriesEntity.setSeries(actualSeries);
+    private List<Integer> mergeSeries(List<Integer> latestSavedSeries, List<Integer> newSeries, int noChangeIndexLimit) {
+        // In this case the timestamp + safety window is after the end of the particular day
+        if (noChangeIndexLimit >= newSeries.size()) {
+            log.warn("The no change limit calculated from timestamp and safety window is beyond the whole series, " +
+                    "series remain the same");
+            return latestSavedSeries;
         }
 
-    }
-
-    private int calculateNoChangeIndexLimit(TimeSeriesEntity newTimeSeriesEntity) {
-        LocalDateTime newTimestamp = newTimeSeriesEntity.getTimestamp(); // TODO timezone change from UTC to local
-
-        // Minutes passed from start of the day until the end of actual timestamp + safety window
-        int minutesUntilNoChangeLimit = newTimestamp.getHour() * 60 + newTimestamp.getMinute() + SAFETY_WINDOW_MINUTES;
-        int period = parsePeriod(newTimeSeriesEntity.getPeriod());
-        return (int) Math.ceil((double) minutesUntilNoChangeLimit / period);
-    }
-
-    private int parsePeriod(String periodString) {
-        return Integer.parseInt(periodString.replaceAll("[^\\d.]", ""));
+        // Concatenate elements from the latest saved series up to the noChangeIndexLimit, and form that on from the new series
+        List<Integer> currentSeriesUntilNoChangeLimit = latestSavedSeries
+                .subList(0, noChangeIndexLimit);
+        List<Integer> newSeriesFromNoChangeLimit = newSeries.subList(noChangeIndexLimit, newSeries.size());
+        return Stream.concat(
+                currentSeriesUntilNoChangeLimit.stream(),
+                newSeriesFromNoChangeLimit.stream()
+        ).toList();
     }
 
     @Override

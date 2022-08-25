@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
@@ -68,7 +69,7 @@ class TimeSeriesServiceImplTest {
         when(mockPowerStationDayDataRepository.findByPowerStationAndDate("Naper\\u0151m\\u0171 2021 Kft. Iborfia",
                 LocalDate.of(2021, 6, 28))).thenReturn(powerStationDateData);
         TimeSeriesInputModel timeSeriesInputModel = getTimeSeriesInputModel_ps_83_20210628_115951();
-        timeSeriesInputModel.setTimestamp(LocalDateTime.of(2021, 6, 28, 22, 35, 53));
+        timeSeriesInputModel.setTimestamp(convertBudToUtcLocalDateTime("2021-06-28T22:35:53"));
         timeSeriesService.processTimeSeries(timeSeriesInputModel);
 
         verify(mockPowerStationDayDataRepository).save(powerStationDayDataArgumentCaptor.capture());
@@ -219,9 +220,17 @@ class TimeSeriesServiceImplTest {
                 .date(LocalDate.of(2021, 6, 28))
                 .zone(TimeZone.getTimeZone("Europe/Budapest"))
                 .period("PT15M")
-                .timestamp(LocalDateTime.of(2021, 6, 28, 11, 59, 51))
+                .timestamp(convertBudToUtcLocalDateTime("2021-06-28T11:59:51"))
                 .series(getSeries_ps_83_20210628_115951())
                 .build();
+    }
+
+    private LocalDateTime convertBudToUtcLocalDateTime(String dateTimeText) {
+        // This conversion is necessary because hardcoded dateTimes will not work if DST changes
+        return LocalDateTime.parse(dateTimeText)
+                .atZone(TimeZone.getTimeZone("Europe/Budapest").toZoneId())
+                .withZoneSameInstant(ZoneId.of("UTC"))
+                .toLocalDateTime();
     }
 
     private List<Integer> getSeries_ps_83_20210628_115951() {
