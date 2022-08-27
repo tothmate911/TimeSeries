@@ -11,7 +11,7 @@ const TimeSeriesColumn: React.FC<Props> = ({ timeSeries }) => {
       <div className="cell">ver{timeSeries.version}</div>
       <div className="cell">{timeSeries.timestamp}</div>
       {timeSeries.series.map((data, index) => (
-        <div key={index} className={`cell ${index <= timeSeries.noChangeIndexLimit + 1 ? "noChange" : ""}`}>
+        <div key={index} className={`cell ${index < timeSeries.noChangeIndexLimit ? "noChange" : ""}`}>
           {data}
         </div>
       ))}

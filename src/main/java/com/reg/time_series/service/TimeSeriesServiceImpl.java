@@ -24,7 +24,17 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
     public PowerStationDateData processTimeSeries(TimeSeriesInputModel timeSeriesInputModel) {
         PowerStationDateData powerStationDateData = powerStationDateDataRepository.findByPowerStationAndDate(
                 timeSeriesInputModel.getPowerStation(), timeSeriesInputModel.getDate());
+        TimeSeriesEntity newTimeSeriesEntity = buildTimeTimeSeriesEntityFromModel(timeSeriesInputModel);
 
+        if (powerStationDateData == null) {
+            powerStationDateData = buildNewPowerStationDayData(timeSeriesInputModel, newTimeSeriesEntity);
+        } else {
+            updatePowerStationDayData(powerStationDateData, newTimeSeriesEntity);
+        }
+        return powerStationDateDataRepository.save(powerStationDateData);
+    }
+
+    private TimeSeriesEntity buildTimeTimeSeriesEntityFromModel(TimeSeriesInputModel timeSeriesInputModel) {
         TimeSeriesEntity newTimeSeries = TimeSeriesEntity.builder()
                 .timestamp(timeSeriesInputModel.getTimestamp())
                 .period(timeSeriesInputModel.getPeriod())
@@ -32,14 +42,7 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
                 .build();
         newTimeSeries.calculateNoChangeIndexLimit(
                 timeSeriesInputModel.getZone(), timeSeriesInputModel.getDate(), SAFETY_WINDOW_MINUTES);
-
-        if (powerStationDateData == null) {
-            powerStationDateData = buildNewPowerStationDayData(timeSeriesInputModel, newTimeSeries);
-        } else {
-            updatePowerStationDayData(powerStationDateData, newTimeSeries);
-        }
-
-        return powerStationDateDataRepository.save(powerStationDateData);
+        return newTimeSeries;
     }
 
     private PowerStationDateData buildNewPowerStationDayData(TimeSeriesInputModel timeSeriesInputModel,
@@ -59,9 +62,9 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
         // Check if latest saved and new series size are equal
         checkSeriesSize(newTimeSeriesEntity, latestSavedTimeSeriesEntity);
         // Merge the latest saved and the new series
-        newTimeSeriesEntity.setSeries(
-                mergeSeries(latestSavedTimeSeriesEntity.getSeries(),
-                        newTimeSeriesEntity.getSeries(), newTimeSeriesEntity.getNoChangeIndexLimit())
+        newTimeSeriesEntity.setSeries(mergeSeries(
+                latestSavedTimeSeriesEntity.getSeries(),
+                newTimeSeriesEntity.getSeries(), newTimeSeriesEntity.getNoChangeIndexLimit())
         );
         // Add the new TimeSeries as the latest saved TimeSeries
         newTimeSeriesEntity.setVersion(latestSavedTimeSeriesEntity.getVersion() + 1);

@@ -20,7 +20,7 @@ const Upload = () => {
     return (
         <div>
             <label className="upload-label" htmlFor="file">Upload TimeSeries</label>
-            <input id="file" type="file" multiple={true} onChange={handleFileInputChange} />
+            <input id="file" type="file" onChange={handleFileInputChange} />
         </div>
     )
 }
