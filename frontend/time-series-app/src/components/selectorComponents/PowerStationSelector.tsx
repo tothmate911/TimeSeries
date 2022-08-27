@@ -6,17 +6,14 @@ const localStoragePowerStationKey: string = "localStoragePowerStationKey";
 interface Props {
   selectedPowerStation: string;
   setSelectedPowerStation: React.Dispatch<React.SetStateAction<string>>;
-
   availablePowerStations: string[];
-  setAvailablePowerStations: React.Dispatch<React.SetStateAction<string[]>>;
+  setAvailablePowerStations: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const PowerStationSelector: React.FC<Props> = ({
   selectedPowerStation, setSelectedPowerStation,
   availablePowerStations, setAvailablePowerStations
 }) => {
-
-  // const [availablePowerStations, setAvailablePowerStations] = useState<string[]>([]);
 
   useEffect(() => {
     axios.get("/power-stations")

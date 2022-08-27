@@ -14,7 +14,6 @@ const Upload: React.FC<Props> = ({ setAvailablePowerStations }) => {
         for (const file of Array.from(files)) {
             const text = await file.text();
             const json = JSON.parse(text);
-            console.log("File content: " + json);
             try {
                 const data = axios.put("/time-series", json);
                 console.log(data);
@@ -22,6 +21,15 @@ const Upload: React.FC<Props> = ({ setAvailablePowerStations }) => {
                 console.log(error);
             }
         }
+
+        axios.get("/power-stations")
+            .then((response) => {
+                const powerStations: string[] = response.data;
+                setAvailablePowerStations(powerStations);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     return (

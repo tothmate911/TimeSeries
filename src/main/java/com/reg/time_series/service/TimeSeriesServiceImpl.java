@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.*;
 import java.util.List;
 import java.util.stream.Stream;
@@ -21,7 +22,7 @@ public class TimeSeriesServiceImpl implements TimeSeriesService {
     private PowerStationDayDataRepository powerStationDateDataRepository;
 
     @Override
-    public PowerStationDateData processTimeSeries(TimeSeriesInputModel timeSeriesInputModel) {
+    public synchronized PowerStationDateData processTimeSeries(TimeSeriesInputModel timeSeriesInputModel) {
         PowerStationDateData powerStationDateData = powerStationDateDataRepository.findByPowerStationAndDate(
                 timeSeriesInputModel.getPowerStation(), timeSeriesInputModel.getDate());
         TimeSeriesEntity newTimeSeriesEntity = buildTimeTimeSeriesEntityFromModel(timeSeriesInputModel);
