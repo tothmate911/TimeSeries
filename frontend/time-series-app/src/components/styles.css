@@ -3,7 +3,6 @@
 }
 
 .column {
-    /* display: inline-block; */
     border: 1px;
     border-style: solid;
 }
@@ -13,7 +12,7 @@
     border-top-style: solid;
     padding: 2px;
     height: 18px;
-    width: 90px;
+    width: 150px;
 }
 
 input[type="file"] {
