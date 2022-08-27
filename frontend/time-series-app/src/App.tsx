@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import Show from './components/Show';
 import Upload from './components/Upload';
 
@@ -8,15 +8,10 @@ axios.defaults.baseURL = backendUrl;
 
 export const App: React.FC = () => {
 
-  const [availablePowerStations, setAvailablePowerStations] = useState<string[]>([]);
-
   return (
     <div>
-      <Upload setAvailablePowerStations={setAvailablePowerStations}/>
-      <Show
-        availablePowerStations={availablePowerStations}
-        setAvailablePowerStations={setAvailablePowerStations}
-      />
+      <Upload />
+      <Show />
     </div>
   );
 };

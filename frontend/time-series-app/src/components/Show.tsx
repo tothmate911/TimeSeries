@@ -4,12 +4,7 @@ import PowerStationSelector from './selectorComponents/PowerStationSelector'
 import Table from './tableComponents/Table';
 import './styles.css'
 
-interface Props {
-  availablePowerStations: string[];
-  setAvailablePowerStations: React.Dispatch<React.SetStateAction<string[]>>
-}
-
-const Show: React.FC<Props> = ({ availablePowerStations, setAvailablePowerStations }) => {
+const Show: React.FC = () => {
 
   const [selectedPowerStation, setSelectedPowerStation] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -20,8 +15,6 @@ const Show: React.FC<Props> = ({ availablePowerStations, setAvailablePowerStatio
       <PowerStationSelector
         selectedPowerStation={selectedPowerStation}
         setSelectedPowerStation={setSelectedPowerStation}
-        availablePowerStations={availablePowerStations}
-        setAvailablePowerStations={setAvailablePowerStations}
       />
       <DateSelector
         selectedPowerStation={selectedPowerStation}

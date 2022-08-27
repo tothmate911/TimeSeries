@@ -1,19 +1,18 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const localStoragePowerStationKey: string = "localStoragePowerStationKey";
 
 interface Props {
   selectedPowerStation: string;
   setSelectedPowerStation: React.Dispatch<React.SetStateAction<string>>;
-  availablePowerStations: string[];
-  setAvailablePowerStations: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const PowerStationSelector: React.FC<Props> = ({
-  selectedPowerStation, setSelectedPowerStation,
-  availablePowerStations, setAvailablePowerStations
+  selectedPowerStation, setSelectedPowerStation
 }) => {
+
+  const [availablePowerStations, setAvailablePowerStations] = useState<string[]>([]);
 
   useEffect(() => {
     axios.get("/power-stations")

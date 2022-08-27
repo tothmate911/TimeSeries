@@ -1,10 +1,6 @@
 import axios from "axios";
 
-interface Props {
-    setAvailablePowerStations: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-const Upload: React.FC<Props> = ({ setAvailablePowerStations }) => {
+const Upload: React.FC = () => {
 
     const handleFileInputChange = async (event: React.FormEvent<HTMLInputElement>) => {
         const files = event.currentTarget.files;
@@ -22,14 +18,7 @@ const Upload: React.FC<Props> = ({ setAvailablePowerStations }) => {
             }
         }
 
-        axios.get("/power-stations")
-            .then((response) => {
-                const powerStations: string[] = response.data;
-                setAvailablePowerStations(powerStations);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        window.location.reload();
     }
 
     return (
