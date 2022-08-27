@@ -1,26 +1,33 @@
 import axios from "axios";
 
-const Upload = () => {
+interface Props {
+    setAvailablePowerStations: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
-    const handleFileInputChange = (event: React.FormEvent<HTMLInputElement>) => {
-        const files = event.currentTarget.files || [];
-        Array.from(files).forEach(async (file) => {
+const Upload: React.FC<Props> = ({ setAvailablePowerStations }) => {
+
+    const handleFileInputChange = async (event: React.FormEvent<HTMLInputElement>) => {
+        const files = event.currentTarget.files;
+        if (!files) {
+            return;
+        }
+        for (const file of Array.from(files)) {
             const text = await file.text();
             const json = JSON.parse(text);
             console.log("File content: " + json);
             try {
-                const data = await axios.put("/time-series", json);
+                const data = axios.put("/time-series", json);
                 console.log(data);
             } catch (error) {
                 console.log(error);
             }
-        });
+        }
     }
 
     return (
         <div>
             <label className="upload-label" htmlFor="file">Upload TimeSeries</label>
-            <input id="file" type="file" onChange={handleFileInputChange} />
+            <input id="file" multiple={true} type="file" onChange={handleFileInputChange} />
         </div>
     )
 }

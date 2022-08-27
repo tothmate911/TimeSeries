@@ -12,7 +12,7 @@ export const App: React.FC = () => {
 
   return (
     <div>
-      <Upload/>
+      <Upload setAvailablePowerStations={setAvailablePowerStations}/>
       <Show
         availablePowerStations={availablePowerStations}
         setAvailablePowerStations={setAvailablePowerStations}
