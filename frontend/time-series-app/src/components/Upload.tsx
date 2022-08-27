@@ -7,12 +7,17 @@ const Upload: React.FC = () => {
         if (!files) {
             return;
         }
-        for (const file of Array.from(files)) {
+
+        const fileArray = Array.from(files);
+        fileArray.sort((file1, file2) => {
+            return file1.name.localeCompare(file2.name);
+        });
+
+        for (const file of fileArray) {
             const text = await file.text();
             const json = JSON.parse(text);
             try {
-                const data = axios.put("/time-series", json);
-                console.log(data);
+                await axios.put("/time-series", json);
             } catch (error) {
                 console.log(error);
             }

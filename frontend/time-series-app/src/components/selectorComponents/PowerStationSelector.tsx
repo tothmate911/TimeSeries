@@ -19,7 +19,6 @@ const PowerStationSelector: React.FC<Props> = ({
       .then((response) => {
         const powerStations: string[] = response.data;
         setAvailablePowerStations(powerStations);
-        console.log("useEffect setAvailablePowerStations(powerStations)");
       })
       .catch((error) => {
         console.log(error);
