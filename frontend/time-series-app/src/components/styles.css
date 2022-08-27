@@ -1,5 +1,9 @@
+.table-container {
+    display: flex;
+}
+
 .column {
-    float: left;
+    /* display: inline-block; */
     border: 1px;
     border-style: solid;
 }
@@ -9,6 +13,7 @@
     border-top-style: solid;
     padding: 2px;
     height: 18px;
+    width: 90px;
 }
 
 input[type="file"] {

@@ -19,6 +19,7 @@ const PowerStationSelector: React.FC<Props> = ({
       .then((response) => {
         const powerStations: string[] = response.data;
         setAvailablePowerStations(powerStations);
+        console.log("useEffect setAvailablePowerStations(powerStations)");
       })
       .catch((error) => {
         console.log(error);
@@ -33,8 +34,9 @@ const PowerStationSelector: React.FC<Props> = ({
     const storedPowerStation: string = localStorage.getItem(localStoragePowerStationKey) || "";
     if (availablePowerStations.includes(storedPowerStation)) {
       setSelectedPowerStation(storedPowerStation);
+    } else {
+      setSelectedPowerStation(availablePowerStations[0]);
     }
-    setSelectedPowerStation(availablePowerStations[0]);
   }, [availablePowerStations, setSelectedPowerStation]);
 
   const handlePowerStationSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
