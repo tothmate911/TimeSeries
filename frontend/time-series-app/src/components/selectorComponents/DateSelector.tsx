@@ -40,7 +40,9 @@ const DateSelector: React.FC<Props> = ({
     if (savedDate !== null && availableDates.includes(savedDate)) {
       setSelectedDate(savedDate);
     } else {
-      setSelectedDate(availableDates[0]);
+      const firstAvailableDate = availableDates[0];
+      setSelectedDate(firstAvailableDate);
+      localStorage.setItem(localStorageDateKey, firstAvailableDate);
     }
   }, [availableDates, setSelectedDate]);
 

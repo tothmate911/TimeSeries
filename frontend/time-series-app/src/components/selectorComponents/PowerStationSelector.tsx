@@ -34,7 +34,9 @@ const PowerStationSelector: React.FC<Props> = ({
     if (availablePowerStations.includes(storedPowerStation)) {
       setSelectedPowerStation(storedPowerStation);
     } else {
-      setSelectedPowerStation(availablePowerStations[0]);
+      const firstAvailablePowerStation = availablePowerStations[0];
+      setSelectedPowerStation(firstAvailablePowerStation);
+      localStorage.setItem(localStoragePowerStationKey, firstAvailablePowerStation);
     }
   }, [availablePowerStations, setSelectedPowerStation]);
 
