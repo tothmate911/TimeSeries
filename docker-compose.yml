@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+
+  frontend:
+    image: 'frontend'
+    build:
+      context: 'frontend/time-series-app'
+      dockerfile: 'Dockerfile'
+    ports:
+      - '3000:3000'
+
   mysqldb:
     image: mysql:latest
     environment:
@@ -13,8 +22,8 @@ services:
       timeout: 20s
       retries: 10
 
-  server:
-    image: 'backend-server'
+  backend:
+    image: 'backend'
     build: '.'
     ports:
       - '8080:8080'
