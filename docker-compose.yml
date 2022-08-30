@@ -1,8 +1,20 @@
 version: '3'
 
 services:
+  mysqldb:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=time_series
+      - MYSQL_USER=sa
+      - MYSQL_PASSWORD=1234
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
   server:
-    image: 'backend'
+    image: 'backend-server'
     build: '.'
     ports:
       - '8080:8080'
@@ -12,12 +24,5 @@ services:
       - spring.datasource.password=1234
       - spring.jpa.hibernate.ddl-auto=create
     depends_on:
-      - mysqldb
-
-  mysqldb:
-    image: mysql:latest
-    environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_DATABASE=time_series
-      - MYSQL_USER=sa
-      - MYSQL_PASSWORD=1234
+      mysqldb:
+        condition: service_healthy

@@ -1,15 +1,16 @@
 package com.reg.time_series.service;
 
 import com.reg.time_series.entity.PowerStationDateData;
-import com.reg.time_series.repository.PowerStationDayDataRepository;
 import com.reg.time_series.entity.TimeSeriesEntity;
 import com.reg.time_series.model.TimeSeriesInputModel;
+import com.reg.time_series.repository.PowerStationDayDataRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@ActiveProfiles(profiles = "test")
 class TimeSeriesServiceImplTest {
 
     @MockBean
