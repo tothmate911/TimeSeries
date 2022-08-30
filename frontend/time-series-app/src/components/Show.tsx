@@ -12,16 +12,18 @@ const Show: React.FC = () => {
 
   return (
     <div>
-      <PowerStationSelector
-        selectedPowerStation={selectedPowerStation}
-        setSelectedPowerStation={setSelectedPowerStation}
-      />
-      <DateSelector
-        selectedPowerStation={selectedPowerStation}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        setReadyToFetchTimeSeries={setReadyToFetchTimeSeries}
-      />
+      <div className="selector-container">
+        <PowerStationSelector
+          selectedPowerStation={selectedPowerStation}
+          setSelectedPowerStation={setSelectedPowerStation}
+        />
+        <DateSelector
+          selectedPowerStation={selectedPowerStation}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          setReadyToFetchTimeSeries={setReadyToFetchTimeSeries}
+        />
+      </div>
       <Table
         selectedPowerStation={selectedPowerStation}
         selectedDate={selectedDate}

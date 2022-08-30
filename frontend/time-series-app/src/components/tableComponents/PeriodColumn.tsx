@@ -21,13 +21,13 @@ const PeriodColumn: React.FC<Props> = ({ period, length }) => {
 
   const cells = [];
   for (let i = 1; i <= length; i++) {
-    cells.push(<div className="cell" key={i}>{getHHmmFormatFromMinutes(i * periodNum)}</div>);
+    cells.push(<div className="cell period" key={i}>{getHHmmFormatFromMinutes(i * periodNum)}</div>);
   }
 
   return (
     <div className="column">
-      <div className="cell">period end</div>
-      <div className="cell"></div>
+      <div className="cell period">period end</div>
+      <div className="cell period"></div>
       {cells}
     </div>
   )

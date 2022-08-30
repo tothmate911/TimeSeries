@@ -48,6 +48,7 @@ const PowerStationSelector: React.FC<Props> = ({
 
   return (
     <select
+    className="power-station-select"
       onChange={handlePowerStationSelectChange}
       value={selectedPowerStation}
     >

@@ -27,8 +27,8 @@ const Upload: React.FC = () => {
     }
 
     return (
-        <div>
-            <label className="upload-label" htmlFor="file">Upload TimeSeries</label>
+        <div className="upload-container">
+            <label htmlFor="file">Upload TimeSeries</label>
             <input id="file" multiple={true} type="file" onChange={handleFileInputChange} />
         </div>
     )

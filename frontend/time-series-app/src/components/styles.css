@@ -1,5 +1,46 @@
+.upload-container {
+    margin: auto;
+    margin: 5px auto;
+    width: 160px;
+    height: 35px;
+
+    color: white;
+    background-color: #ff0000;
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.selector-container {
+    margin: auto;
+    width: fit-content;
+    height: 30px;
+}
+
+.power-station-select {
+    float: left;
+    margin-right: 4px;
+}
+
+.date-select {
+    float: right;
+    margin-left: 4px;
+}
+
+.table-title {
+    margin: 0 15px;
+}
+
 .table-container {
     display: flex;
+    margin: 5px 15px;
 }
 
 .column {
@@ -15,21 +56,8 @@
     width: 150px;
 }
 
-input[type="file"] {
-    display: none;
-}
-
-.upload-label {
-    color: white;
-    height: 80px;
-    width: 250px;
-    background-color: #ff0000;
-
-    margin: auto;
-    padding: 15px;
-    border-radius: 10px;
-
-    cursor: pointer;
+.period {
+    width: 90px;
 }
 
 .noChange {

@@ -60,6 +60,7 @@ const DateSelector: React.FC<Props> = ({
 
   return (
     <select
+      className="date-select"
       onChange={handleDateSelectChange}
       value={selectedDate}
     >

@@ -9,7 +9,7 @@ axios.defaults.baseURL = backendUrl;
 export const App: React.FC = () => {
 
   return (
-    <div>
+    <div className="app-container">
       <Upload />
       <Show />
     </div>

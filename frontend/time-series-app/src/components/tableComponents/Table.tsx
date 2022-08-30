@@ -38,7 +38,7 @@ const Table: React.FC<Props> = ({
 
   return (
     <div>
-      <div>{
+      <div className="table-title">{
         selectedPowerStation ?
           `${selectedPowerStation} - ${selectedDate}`
           : "Please upload TimeSeries"}</div>
